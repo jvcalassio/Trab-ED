@@ -1,9 +1,21 @@
-#include <stdlib.h>
+/**
+ * @file expr_calc.c
+ * @brief Contem as funcoes principais para o funcionamento do programa
+ * \par
+ * Contem a implementação da pilha de ponto flutuante, chamada float_stack
+ * \par
+ * Contem as funções que realizam as conversões string<->float, e as funcoes que fazem as operacoes algebricas.
+ * @author Joao Victor
+*/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "expr_calc.h"
 
+/**
+ * Cria uma pilha do tipo float_stack
+ */
 float_stack* new_float_stack(){
 	float_stack* p = malloc(sizeof(float_stack));
 	p->top = NULL;
@@ -11,6 +23,11 @@ float_stack* new_float_stack(){
 	return p;
 }
 
+/**
+ * Empilha elementos na pilha
+ * @param value valor a ser inserido
+ * @param p a pilha em que sera inserido o elemento
+*/
 int push_float_stack(float value, float_stack* p){
 	elem_float_stack* elem = malloc(sizeof(elem_float_stack));
 	if(elem!=NULL){
@@ -22,7 +39,10 @@ int push_float_stack(float value, float_stack* p){
 	}
 	return 0;
 }
-
+/**
+ * Desempilha o elemento do topo da pilha
+ * @param p a pilha em que sera removido o elemento 
+ */
 int pop_float_stack(float_stack* p){
 	if(p->size > 1){
 		elem_float_stack* temp = p->top->ant;
@@ -39,6 +59,10 @@ int pop_float_stack(float_stack* p){
 	return 0;
 }
 
+/**
+ * Deleta uma pilha
+ * @param p a pilha a ser eliminada
+ */
 void del_float_stack(float_stack* p){
 	if(p->size > 0){
 		while(p->size != 0){
@@ -48,6 +72,11 @@ void del_float_stack(float_stack* p){
 	free(p);
 }
 
+/**
+ * Valida uma expressao matematica infixa
+ * Avaliacao da quantidade de parenteses
+ * @param s string contendo a expressao infixa
+ */
 int valid_expr(char* s){
 	int len = strlen(s);
 	int valid = 1;
@@ -71,13 +100,17 @@ int valid_expr(char* s){
 	return valid;
 }
 
-/* operadores organizados por numeros:
- * 1 = -
- * 2 = +
- * 3 = *
- * 4 = /
- * Prioridades 1 = 2 < 3 = 4
- * 5 = (
+/** 
+ * Transforma uma expressao da forma infixa para posfixa
+ * -# Os operadores sao empilhados em um float_stack, segundo a seguinte ordem:
+ * 	- 1 = -
+ * 	- 2 = +
+ * 	- 3 = *
+ * 	- 4 = /
+ * 	- 5 = (
+ * -# Prioridades 1 = 2 < 3 = 4
+ * @param s string contendo a expressao infixa
+ * @param answ string em que sera inserida a expressao na forma posfixa
  */
 void in_to_pos(char* s, char* answ){
 	int pos_answ = 0;
@@ -159,6 +192,12 @@ void in_to_pos(char* s, char* answ){
 	answ[pos_answ] = '\0';
 }
 
+/**
+ * Transforma uma string com inteiros e virgula para ponto flutuante (float)
+ * Feita especificamente para a funcao calc_expr (por conta dos espacos)
+ * @param string string a ser convertida
+ * @param string_len tamanho da string a ser convertida
+ */
 float string_to_float(char* string, int string_len){
 	float total = 0;
 	int casas_ant_virgula = 0;
@@ -196,6 +235,10 @@ float string_to_float(char* string, int string_len){
 	return total;
 }
 
+/** 
+ * Calcula o resultado de uma expressao na forma posfixa
+ * @param answ string da expressao a ser calculada
+ */
 float calc_expr(char* answ){
 	float_stack* p = new_float_stack();
 	int len = strlen(answ);
@@ -257,12 +300,22 @@ float calc_expr(char* answ){
 	return fansw;
 }
 
-
+/**
+ * Transforma uma string com inteiros e virgula para ponto flutuante (float)
+ * Funciona com numeros negativos
+ * @param string string a ser convertida
+ * @param string_len tamanho da string a ser convertida
+ */
 float special_string_to_float(char* string, int string_len){
 	float total = 0;
 	int casas_ant_virgula = 0;
 	int casas_pos_virgula = 0;
 	int achou_virgula = 0;
+	int negativo = 0;
+	if(string[0]=='-'){
+		negativo = 1;
+		string[0] = '0';
+	}
 	for(int i=0;i<string_len;i++){
 		if(string[i]==','){
 			casas_ant_virgula = i;
@@ -292,9 +345,18 @@ float special_string_to_float(char* string, int string_len){
 			l++;
 		}
 	}
-	return total;
+	if(negativo) 
+		return -total;
+	else
+		return total;
 }
 
+/**
+ * Imprime um numero conforme suas casas decimais:
+ * -# Caso o numero tenha todas as casas decimais como 0, imprime um inteiro
+ * -# Caso o numero tenha uma ou mais casas decimais diferentes de 0, imprime um ponto flutuante com 2 casas decimais de precisao
+ * @param f numero em ponto flutuante
+ */ 
 void print_float(float f){
 	int k = (int) f;
 	if(f-k == 0){
@@ -305,6 +367,10 @@ void print_float(float f){
 	}
 }
 
+/**
+ * Imprime uma pilha
+ * @param p pilha a ser impressa
+ */
 void print_float_stack(float_stack* p){
 	if(p->size != 0){
 		float_stack* temp = new_float_stack();
@@ -328,6 +394,12 @@ void print_float_stack(float_stack* p){
 	}
 }
 
+/**
+ * Realiza operacoes em uma pilha
+ * @param op operacao a ser realizada
+ * @param p em qual pilha deve ser realizada a operacao
+ * @param repeat deve-se repetir a operacao ate o final (1 = sim, 0 = nao)
+ */
 void op_float_stack(char op, float_stack* p, int repeat){
 	float_stack* temp = new_float_stack();
 	if(op=='+'){

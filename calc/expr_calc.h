@@ -1,13 +1,32 @@
+/**
+ * @file expr_calc.h
+ * @brief Definicoes das estruturas e funcoes
+ * \par
+ * Contem as assinaturas das estruturas necessarias para a implementação do tipo float_stack
+ * \par
+ * Contem as assinaturas das funções principais do programa.
+ * @author Joao Victor
+*/
 #ifndef __EXPR_CALC__
 #define __EXPR_CALC__
 
+/**
+ * Estrutura para um elemento de uma pilha do tipo float_stack
+ */
 typedef struct elem_float_stack_s{
+	//! valor do elemento
 	float val;
+	//! elemento anterior na pilha (se for o primeiro, será NULL)
 	struct elem_float_stack_s* ant;
 } elem_float_stack;
 
-typedef struct{
+/**
+ * Estrutura para uma pilha do tipo float_stack
+ */
+typedef struct float_stack_s{
+	//! elemento no topo da pilha
 	elem_float_stack* top;
+	//! altura da pilha
 	float size;
 } float_stack;
 
