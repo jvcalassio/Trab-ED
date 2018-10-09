@@ -1,5 +1,7 @@
-# Trab-ED
+# Trabalhos ED
 
-Calc:
+## Calc:
+
   Calculadora de expressões matematicas
+  
   Em desenvolvimento
