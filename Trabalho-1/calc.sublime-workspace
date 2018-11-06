@@ -351,15 +351,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/home/joao/Documents/ex.cpp",
-			"settings":
-			{
-				"buffer_size": 720,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -405,9 +396,16 @@
 	},
 	"expanded_folders":
 	[
+		"/home/joao/Documents/Trab-ED"
 	],
 	"file_history":
 	[
+		"/home/joao/Documents/teste.txt",
+		"/home/joao/Documents/ex.cpp",
+		"/home/joao/.cache/.fr-41PPGj/expr_calc.c",
+		"/home/joao/.cache/.fr-QFkvuX/main.c",
+		"/home/joao/.cache/.fr-zY93Pu/main.c",
+		"/home/joao/.cache/.fr-gxTwzn/expr_calc.c",
 		"/home/joao/Documents/ex2.cpp",
 		"/home/joao/Documents/calc/temp.c",
 		"/home/joao/Documents/calc/expr_calc.c",
@@ -430,7 +428,6 @@
 		"/home/joao/Documents/Trab ED/main.c",
 		"/home/joao/Documents/teste.cpp",
 		"/home/joao/Documents/saida.txt",
-		"/home/joao/Documents/teste.txt",
 		"/home/joao/Quartus-web-13.0.1.232-linux/setup.sh",
 		"/home/joao/Documents/main.java",
 		"/media/joao/ARQUIVOS/Documentos/CLion Projects/main.cpp",
@@ -531,38 +528,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/home/joao/Documents/ex.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 720,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								372,
-								372
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
