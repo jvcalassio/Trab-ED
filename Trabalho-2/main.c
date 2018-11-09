@@ -19,6 +19,12 @@ int indexOf(int n, int vet[], int size){
 	return -1;
 }
 
+
+/**
+ * Mostra a lista dos personagens escolhidos do arquivo
+ * Mostra apenas um atributo, escolhido aleatoriamente, para cada personagem
+ * @param lista lista dos personagens
+ */
 void print_participants(t_lista* lista){
 	int s = lista->qtd;
 	t_elem_lista* temp = lista->first;
@@ -126,20 +132,7 @@ t_elem_lista* get_elem_at(t_lista* lista, int index){
  * @param players lista de todos os competidores
  * @param n_player numero do competidor escolhido pelo jogador
  */
-void show_player_char(t_lista* players, int n_player){
-	/*int i;
-	t_elem_lista* aux = players->first;
-	for(int i=1;i<=16;i++){
-		if(i==n_player){
-			Ninja* n = aux->ninja;
-			printf("Seu personagem: %s\n",n->nome);
-			printf("1) Ninjutsu : %d\n",n->ninjutsu);
-			printf("2) Genjutsu : %d\n",n->genjutsu);
-			printf("3) Taijutsu : %d\n",n->taijutsu);
-			printf("4) Defesa : %d\n",n->defesa);
-		}
-		aux = aux->prox;
-	}*/
+void show_player_char(t_lista* players, int n_player){ 
 	t_elem_lista* aux = get_elem_at(players, n_player);
 	Ninja* n = aux->ninja;
 	printf("Seu personagem: %s\n",n->nome);
@@ -149,7 +142,7 @@ void show_player_char(t_lista* players, int n_player){
 	printf("4) Defesa : %d\n",n->defesa);
 }
 
-void change_places(t_elem_lista* f, t_elem_lista* s){
+void switch_places(t_elem_lista* f, t_elem_lista* s){
 	Ninja* aux = f->ninja;
 	f->ninja = s->ninja;
 	s->ninja = aux;
@@ -166,10 +159,29 @@ void shuffle_list(t_lista* lista){
 	int i, j;
 	for(i=s-1;i>0;i--){
 		j = rand()%i+1;
-		if(j!=i)
-			change_places(get_elem_at(lista, j), get_elem_at(lista, i));
+		if(j!=i)0
+			switch_places(get_elem_at(lista, j), get_elem_at(lista, i));
 	}
 }
+
+/**
+ * Move os jogadores que estao na lista, para a arvore
+ * @param raiz no raiz da arvore
+ * @param players lista dos players
+ * @param indice indice do player a ser retirado da lista
+ */
+void insert_players(t_node* raiz, t_elem_lista* elem){
+	if(raiz->left == NULL && raiz->right == NULL){
+		// inserir player
+		Ninja* n = elem->ninja;
+		raiz->ninja = n;
+		elem = elem->proximo;
+	} else {
+		insert_players(raiz->left, elem);
+		insert_players(raiz->right, elem);
+	}
+}
+
 /**
  * Funcao principal de jogo
  */
@@ -198,7 +210,21 @@ void start(){
 	while(n_player < 1 || n_player > 16)
 		scanf("%d",&n_player);
 
-	// Aqui apos a escolha do player, deve-se inserir todos os jogadores na arvore
+	// Criacao a arvore com 4 niveis e insercao dos jogadores nos ultimos niveis
+	t_node* raiz = tree_create();
+	t_elem_lista* start_index = players->first;
+	insert_players(raiz, start_index);
+
+	// resumao:
+	// char do player = n_player
+	// rodada = step
+	// atributo escolhido pelo player = atr_player
+	// fazer loop para todas as rodadas DO PLAYER
+	// fazer loop para todas as rodadas do resto
+	// fazer lista para salvar todas as rodadas e printar no final
+	// mudar a "show_player_char" para considerar os atributos
+
+
 	printf("%da ETAPA\n\n", step);
 	show_player_char(players, n_player);
 	printf("\nSeu adversario: A ESCOLHER\n\n");

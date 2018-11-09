@@ -23,11 +23,31 @@ t_node* node_create(){
 }
 
 /**
+ * Funcao auxiliar que gera a arvore, recursivamente
+ * @param raiz no raiz da arvore
+ * @param ntotal numero de niveis da arvore
+ */
+void ger_tree(t_node* raiz, int ntotal){
+	ntotal++;
+	raiz->left = node_create();
+	raiz->right = node_create();
+	if(ntotal == 4){
+		return;
+	} else {
+		ger_tree(raiz->left,ntotal);
+		ger_tree(raiz->right,ntotal);
+	}
+	return;
+}
+
+/**
  * Cria a arvore completa, com os 4 niveis gerados
  * Retorna o ponteiro para o nó raiz
  */
 t_node* tree_create(){
-
+	t_node* raiz = node_create();
+	ger_tree(raiz, 0);
+	return raiz;
 }
 
 /**
