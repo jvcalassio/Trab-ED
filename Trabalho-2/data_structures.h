@@ -74,8 +74,6 @@ Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
 	int _taijutsu, int _defesa);
 void ninja_free(Ninja* ninja);
 
-Ninja* fight(Ninja* ninja_one, Ninja* ninja_two, int attribute);
-
 void tree_print_preorder(t_node* root);
 
 // Funcoes da lista

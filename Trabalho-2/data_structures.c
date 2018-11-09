@@ -81,28 +81,6 @@ Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
 	return n;
 }
 
-/** 
- * Realiza a 'luta' entre dois ninjas, comparando o atributo desejado.
- * Retorna o ponteiro para o ninja vencedor
- * @param ninja_one primeiro ninja
- * @param ninja_two segundo ninja
- * @param attribute atributo a ser comparado para definir o vencedor
- */ 
-Ninja* fight(Ninja* ninja_one, Ninja* ninja_two, int attribute){
-	// atributos do ninja 1
-	int nj1[] = {0, ninja_one->ninjutsu, ninja_one->genjutsu,
-				 ninja_one->taijutsu, ninja_one->defesa};
-	// atributos do ninja 2;
-	int nj2[] = {0, ninja_two->ninjutsu, ninja_two->genjutsu,
-				 ninja_two->taijutsu, ninja_two->defesa};
-
-	if(nj2[attribute] > nj1[attribute]){
-		return ninja_two;
-	} else {
-		return ninja_one;
-	}
-}
-
 /**
  * Libera um ninja da memoria
  * @param ninja ponteiro para o ninja a ser removido

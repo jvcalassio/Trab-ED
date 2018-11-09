@@ -28,6 +28,16 @@ int indexOf(int n, int vet[], int size){
 	return -1;
 }
 
+/**
+ * Converte int para string
+ * Retorna ponteiro para a string
+ * @param num numero de ate 3 digitos a ser convertido
+ */
+char* intToString(int num){
+	char *str = malloc(4);
+	sprintf(str, "%d",num);
+	return str;
+}
 
 /**
  * Mostra a lista dos personagens escolhidos do arquivo
@@ -49,23 +59,22 @@ void print_participants(t_lista* lista){
 		char defval[] = "??";
 
 		switch(toshow){
-			case 1: chosen_atr_val = temp->ninja->ninjutsu; break;
-			case 2: chosen_atr_val = temp->ninja->genjutsu; break;
-			case 3: chosen_atr_val = temp->ninja->taijutsu; break;
-			case 4: chosen_atr_val = temp->ninja->defesa; break;
-		}
-
-		int convDig1 = (chosen_atr_val/10);
-		float aux = (chosen_atr_val-(convDig1*10));
-		int convDig2 = (int) aux;
-		convDig1 += '0';
-		convDig2 += '0';
-
-		switch(toshow){
-			case 1: ninval[0] = convDig1; ninval[1] = convDig2; break;
-			case 2: genval[0] = convDig1; genval[1] = convDig2; break;
-			case 3: taival[0] = convDig1; taival[1] = convDig2; break;
-			case 4: defval[0] = convDig1; defval[1] = convDig2; break;
+			case 1: 
+				chosen_atr_val = temp->ninja->ninjutsu;
+				strcpy(ninval, intToString(chosen_atr_val));
+				break;
+			case 2: 
+				chosen_atr_val = temp->ninja->genjutsu; 
+				strcpy(genval, intToString(chosen_atr_val));
+				break;
+			case 3: 
+				chosen_atr_val = temp->ninja->taijutsu; 
+				strcpy(taival, intToString(chosen_atr_val));
+				break;
+			case 4: 
+				chosen_atr_val = temp->ninja->defesa; 
+				strcpy(defval, intToString(chosen_atr_val));
+				break;
 		}
 
 		printf("Ninjutsu: %s Genjutsu: %s Taijutsu: %s Defesa: %s\n\n",ninval,genval,taival,defval);
@@ -178,12 +187,41 @@ int elem_beat(char* elem1, char* elem2){
 	return 0;
 }
 
+/** 
+ * Realiza a 'luta' entre dois ninjas, comparando o atributo desejado.
+ * Retorna o ponteiro para o ninja vencedor
+ * @param ninja_one primeiro ninja
+ * @param ninja_two segundo ninja
+ * @param attribute atributo a ser comparado para definir o vencedor
+ */ 
+Ninja* fight(Ninja* ninja_one, Ninja* ninja_two, int attribute){
+	// atributos do ninja 1
+	int nj1[] = {0, ninja_one->ninjutsu, ninja_one->genjutsu,
+				 ninja_one->taijutsu, ninja_one->defesa};
+	// atributos do ninja 2;
+	int nj2[] = {0, ninja_two->ninjutsu, ninja_two->genjutsu,
+				 ninja_two->taijutsu, ninja_two->defesa};
+
+	float mul = 1.0;
+	int vantagem = elem_beat(ninja_one->elemento, ninja_two->elemento);
+	if(vantagem == 1)
+		mul = 1.2;
+	else if(vantagem == -1)
+		mul = 0.8;
+
+	if(nj2[attribute] > nj1[attribute] * mul){
+		return ninja_two;
+	} else {
+		return ninja_one;
+	}
+}
+
 /**
  * Mostra o personagem escolhido pelo jogador, e os seus atributos
  * @param players lista de todos os competidores
  * @param n_player numero do competidor escolhido pelo jogador
  */
-void show_player_char(Ninja* n, Ninja* enemy){
+void show_player_char(Ninja* n, Ninja* enemy, int chosen_last_round){
 	int ninjutsu = n->ninjutsu;
 	int genjutsu = n->genjutsu;
 	int taijutsu = n->taijutsu;
@@ -206,12 +244,24 @@ void show_player_char(Ninja* n, Ninja* enemy){
 		taijutsu *= 0.8;
 		defesa *= 0.8;
 	}
+	char str1[17] = "1) Ninjutsu : "; strcat(str1, intToString(ninjutsu));
+	char str2[17] = "2) Genjutsu : "; strcat(str2, intToString(genjutsu));
+	char str3[17] = "3) Taijutsu : "; strcat(str3, intToString(taijutsu));
+	char str4[17] = "4) Defesa : "; strcat(str4, intToString(defesa));
 
+	if(chosen_last_round == 1)
+		strcpy(str1,"X) XXXXX : XX");
+	else if(chosen_last_round == 2)
+		strcpy(str2,"X) XXXXX : XX");
+	else if(chosen_last_round == 3)
+		strcpy(str3,"X) XXXXX : XX");
+	else if(chosen_last_round == 4)
+		strcpy(str4,"X) XXXXX : XX");
 
-	printf("1) Ninjutsu : %d\n", ninjutsu);
-	printf("2) Genjutsu : %d\n", genjutsu);
-	printf("3) Taijutsu : %d\n", taijutsu);
-	printf("4) Defesa : %d\n", defesa);
+	printf("%s\n", str1);
+	printf("%s\n", str2);
+	printf("%s\n", str3);
+	printf("%s\n", str4);
 }
 
 void switch_places(t_elem_lista* f, t_elem_lista* s){
@@ -247,7 +297,6 @@ void insert_players(t_node* raiz, t_lista* players){
 		t_elem_lista* l = players->first;
 		Ninja* n = l->ninja;
 		raiz->ninja = n;
-		printf("%s\n",n->nome);
 		if(l!=NULL){
 			players->first = l->prox;
 			if(players->first!=NULL)
@@ -305,7 +354,35 @@ void print2DUtil(t_node *root, int space)
   
     // Process left child 
     print2DUtil(root->left, space); 
-} 
+}
+
+t_node* sobe_level(t_node* raiz, Ninja* p_winner){
+	if(raiz->left == NULL && raiz->right == NULL){
+		return NULL;
+	} else {
+		t_node* l1 = sobe_level(raiz->left, p_winner);
+		t_node* l2 = sobe_level(raiz->right, p_winner);
+		if(l1 == NULL && l2 == NULL){
+			if(raiz->left->ninja == p_winner || raiz->right->ninja == p_winner){
+				raiz->ninja = p_winner;
+				printf("Ganhou: %s\n",p_winner->nome);
+				free(raiz->left);
+				free(raiz->right);
+				raiz->left = NULL;
+				raiz->right = NULL;
+			} else {
+				int atr = rand()%4 + 1;
+				Ninja* t = fight(raiz->left->ninja, raiz->right->ninja, atr);
+				printf("Ganhou: %s\n",t->nome);
+				raiz->ninja = t;
+				free(raiz->left);
+				free(raiz->right);
+				raiz->left = NULL;
+				raiz->right = NULL;
+			}
+		}
+	}
+}
 
 /**
  * Funcao principal de jogo
@@ -315,6 +392,7 @@ void start(){
 	system("clear");
 	FILE* f = fopen("ninjas.txt","r");
 	int i, n_player = 0, atr_player = 0;
+	int chosen_last_round = 0;
 	int step = 1;
 	t_lista* players = list_create();
 
@@ -337,8 +415,6 @@ void start(){
 
 	// Criacao a arvore com 4 niveis e insercao dos jogadores nos ultimos niveis
 	t_node* raiz = tree_create();
-	/*t_elem_lista* start_index = players->first;
-	insert_players(raiz, start_index);*/
 	//print2DUtil(raiz, 0);
 	Ninja* player_ninja = (get_elem_at(players,n_player))->ninja;
 	insert_players(raiz, players);
@@ -352,19 +428,38 @@ void start(){
 	// fazer loop para todas as rodadas DO PLAYER
 	// fazer loop para todas as rodadas do resto
 	// fazer lista para salvar todas as rodadas e printar no final
-	// mudar a "show_player_char" para considerar os atributos
+	
 	while(step <= 4){
 		system("clear");
 		printf("%da ETAPA\n\n", step);
 		Ninja* enemy_ninja = get_enemy(raiz, player_ninja);
 
-		show_player_char(player_ninja, enemy_ninja);
+		show_player_char(player_ninja, enemy_ninja, chosen_last_round);
 		printf("\nSeu adversario: %s\n\n",enemy_ninja->nome);
 		printf("Selecione um atributo: ");
-		scanf("%d",&atr_player);
+		while(atr_player == chosen_last_round || (atr_player < 1 || atr_player > 4))
+			scanf("%d",&atr_player);
 
+		Ninja* rwinner = fight(player_ninja, enemy_ninja, atr_player);
+		if(rwinner == player_ninja){
+			printf("Vencedor!\n");
+			printf("Pressione qualquer tecla para prosseguir\n");
+
+			sobe_level(raiz, rwinner);
+
+			setbuf(stdin, NULL);
+			getchar();
+		} else {
+			printf("Derrota.\n");
+			for(int i=0;i<(4-step);i++) sobe_level(raiz, NULL);
+			//funcao de printar todas as partidas
+			printf("Voltar ao menu principal\n");
+			step = 5;
+			setbuf(stdin, NULL);
+			getchar();
+		}
+
+		chosen_last_round = atr_player;
 		step++;
 	}
-	getchar();
-	getchar();
 }
