@@ -6,7 +6,7 @@ Kankurou, Agua, 59, 42, 97, 60
 Shino, Fogo, 34, 97, 65, 85
 Temari, Vento, 96, 42, 63, 74
 Dosu, Terra, 33, 67, 43, 39
-Sikamaru, Fogo, 38, 50, 68, 71
+Shikamaru, Fogo, 38, 50, 68, 71
 Yoroi Akadou, Fogo, 48, 83, 97, 48
 Zaku, Vento, 30, 79, 74, 71
 Misumi Tsurugi, Fogo, 79, 93, 83, 71

@@ -86,8 +86,14 @@ Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
  * @param ninja ponteiro para o ninja a ser removido
  */
 void ninja_free(Ninja* ninja){
-	free(ninja->nome);
-	free(ninja->elemento);
+	if(ninja->elemento != NULL){
+		free(ninja->nome);
+		ninja->nome = NULL;
+	}
+	if(ninja->elemento != NULL){
+		free(ninja->elemento);
+		ninja->elemento = NULL;
+	}
 	free(ninja);
 }
 
@@ -139,8 +145,38 @@ void list_insert(t_lista* lista, Ninja* n){
  */
 void remove_lista(t_lista* lista){
 	t_elem_lista* t = lista->first;
+	int i = 0;
 	while(t != NULL){
-		t_elem_lista* temp = t->prox;
-		t = temp;
+		if(i<8){
+			ninja_free(t->ninja);
+			t->ninja = NULL;
+		}
+
+		t_elem_lista* aux = t->prox;
+		free(t);
+		t = aux;
+		i++;
+	}
+	free(lista);
+}
+
+/**
+ * Remove todos os nos de um determinado no
+ * @param raiz no raiz da arvore
+ */
+void tree_free(t_node* raiz){
+	if(raiz->left == NULL && raiz->right == NULL){
+		free(raiz);
+		return;
+	} else {
+		if(raiz->left != NULL){
+			tree_free(raiz->left);
+			raiz->left = NULL;
+		}
+		if(raiz->right != NULL){
+			tree_free(raiz->right);
+			raiz->right = NULL;
+		}
+		free(raiz);
 	}
 }
