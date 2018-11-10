@@ -53,10 +53,10 @@ void print_participants(t_lista* lista){
 		int toshow = rand()%4+1;
 		int chosen_atr_val;
 
-		char ninval[] = "??";
-		char genval[] = "??";
-		char taival[] = "??";
-		char defval[] = "??";
+		char ninval[4] = "??";
+		char genval[4] = "??";
+		char taival[4] = "??";
+		char defval[4] = "??";
 
 		switch(toshow){
 			case 1: 
