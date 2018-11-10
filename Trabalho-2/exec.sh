@@ -1,4 +1,4 @@
 #!/bin/bash
-gcc -c data_structures.c -g
-gcc -c functions.c -g
-gcc -o main main.c data_structures.o functions.o -g
+gcc -Wall -c data_structures.c -g
+gcc -Wall -c functions.c -g
+gcc -Wall -o main main.c data_structures.o functions.o -g

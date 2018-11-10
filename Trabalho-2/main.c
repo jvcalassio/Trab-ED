@@ -13,6 +13,7 @@ int main() {
 		printf("Exame Chunin\n");
 		printf("1) Iniciar Exame\n");
 		printf("2) Sair\n");
+		setbuf(stdin, NULL);
 		scanf("%d",&n);
 		if(n==1){
 			start();
