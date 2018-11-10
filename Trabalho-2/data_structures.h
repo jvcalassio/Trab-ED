@@ -73,6 +73,7 @@ void tree_free(t_node* tree);
 Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
 	int _taijutsu, int _defesa);
 void ninja_free(Ninja* ninja);
+// Obs: funcao Ninja* fight(...) esta no arquivo functions.c
 
 void tree_print_preorder(t_node* root);
 
