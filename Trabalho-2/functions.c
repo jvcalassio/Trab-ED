@@ -356,16 +356,26 @@ void print2DUtil(t_node *root, int space)
     print2DUtil(root->left, space); 
 }
 
-t_node* sobe_level(t_node* raiz, Ninja* p_winner){
+t_node* sobe_level(t_node* raiz, Ninja* p_winner, t_lista* perdedores, t_lista* vencedores){
 	if(raiz->left == NULL && raiz->right == NULL){
 		return NULL;
 	} else {
-		t_node* l1 = sobe_level(raiz->left, p_winner);
-		t_node* l2 = sobe_level(raiz->right, p_winner);
+		t_node* l1 = sobe_level(raiz->left, p_winner, perdedores, vencedores);
+		t_node* l2 = sobe_level(raiz->right, p_winner, perdedores, vencedores);
 		if(l1 == NULL && l2 == NULL){
 			if(raiz->left->ninja == p_winner || raiz->right->ninja == p_winner){
 				raiz->ninja = p_winner;
-				printf("Ganhou: %s\n",p_winner->nome);
+				list_insert(vencedores, p_winner);
+
+				Ninja* p_loser;
+				if(raiz->left->ninja == p_winner){
+					p_loser = raiz->right->ninja;
+				} else if(raiz->right->ninja == p_winner){
+					p_loser = raiz->left->ninja;
+				}
+				list_insert(perdedores, p_loser);
+
+				//printf("Ganhou: %s\n",p_winner->nome);
 				free(raiz->left);
 				free(raiz->right);
 				raiz->left = NULL;
@@ -373,8 +383,18 @@ t_node* sobe_level(t_node* raiz, Ninja* p_winner){
 			} else {
 				int atr = rand()%4 + 1;
 				Ninja* t = fight(raiz->left->ninja, raiz->right->ninja, atr);
-				printf("Ganhou: %s\n",t->nome);
+				//printf("Ganhou: %s\n",t->nome);
 				raiz->ninja = t;
+				list_insert(vencedores, t);
+
+				Ninja* p_loser;
+				if(raiz->left->ninja == t){
+					p_loser = raiz->right->ninja;
+				} else if(raiz->right->ninja == t){
+					p_loser = raiz->left->ninja;
+				}
+				list_insert(perdedores, p_loser);
+
 				free(raiz->left);
 				free(raiz->right);
 				raiz->left = NULL;
@@ -382,6 +402,50 @@ t_node* sobe_level(t_node* raiz, Ninja* p_winner){
 			}
 		}
 	}
+}
+
+void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas){
+	t_elem_lista* p1 = perdedores->first;
+	t_elem_lista* p2 = vencedores->first;
+	if(rodadas >= 1){
+		printf("1a ETAPA:\n");
+		for(int i=0;i<8;i++){
+			char* n1 = p1->ninja->nome;
+			char* n2 = p2->ninja->nome;
+			printf("%s x %s\n",n1, n2);
+			p1 = p1->prox;
+			p2 = p2->prox;
+		}
+	}
+	if(rodadas >= 2){
+		printf("\n2a ETAPA:\n");
+		for(int i=0;i<4;i++){
+			char* n1 = p1->ninja->nome;
+			char* n2 = p2->ninja->nome;
+			printf("%s x %s\n",n1, n2);
+			p1 = p1->prox;
+			p2 = p2->prox;
+		}
+	}	
+	if(rodadas >= 3){
+		printf("\n3a ETAPA:\n");
+		for(int i=0;i<2;i++){
+			char* n1 = p1->ninja->nome;
+			char* n2 = p2->ninja->nome;
+			printf("%s x %s\n",n1, n2);
+			p1 = p1->prox;
+			p2 = p2->prox;
+		}
+	}	
+	if(rodadas >= 4){
+		printf("\n4a ETAPA:\n");
+		char* n1 = p1->ninja->nome;
+		char* n2 = p2->ninja->nome;
+		printf("%s x %s\n",n1, n2);
+
+		p2 = p2->prox;
+		printf("VENCEDOR DO TORNEIO: %s\n",p2->ninja->nome);
+	}	
 }
 
 /**
@@ -428,7 +492,9 @@ void start(){
 	// fazer loop para todas as rodadas DO PLAYER
 	// fazer loop para todas as rodadas do resto
 	// fazer lista para salvar todas as rodadas e printar no final
-	
+	t_lista* perdedores = list_create();
+	t_lista* vencedores = list_create();
+
 	while(step <= 4){
 		system("clear");
 		printf("%da ETAPA\n\n", step);
@@ -445,15 +511,20 @@ void start(){
 			printf("Vencedor!\n");
 			printf("Pressione qualquer tecla para prosseguir\n");
 
-			sobe_level(raiz, rwinner);
+			sobe_level(raiz, rwinner, perdedores, vencedores);
+
+			if(step == 4){
+				print_battles(perdedores, vencedores, step);
+			}
 
 			setbuf(stdin, NULL);
 			getchar();
 		} else {
-			printf("Derrota.\n");
-			for(int i=0;i<(4-step);i++) sobe_level(raiz, NULL);
+			printf("Derrota.\n\n");
+			for(int i=0;i<(4-step);i++) sobe_level(raiz, enemy_ninja, perdedores, vencedores);
+			print_battles(perdedores, vencedores, step);
 			//funcao de printar todas as partidas
-			printf("Voltar ao menu principal\n");
+			printf("\nVoltar ao menu principal\n");
 			step = 5;
 			setbuf(stdin, NULL);
 			getchar();

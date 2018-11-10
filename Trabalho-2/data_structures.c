@@ -117,6 +117,23 @@ t_elem_lista* aloc_elem(Ninja* _ninja){
 }
 
 /**
+ * Insere um elemento no final da lista
+ * @param lista lista a se inserir o elemento
+ * @param n ninja contido no elemento
+ */
+void list_insert(t_lista* lista, Ninja* n){
+	t_elem_lista* elem = aloc_elem(n);
+	if(lista->qtd == 0){
+		lista->first = elem;
+	} else {
+		lista->last->prox = elem;
+		elem->ant = lista->last;
+	}
+	lista->last = elem;
+	lista->qtd++;
+}
+
+/**
  * Remove uma lista
  * @param lista lista a ser removida
  */

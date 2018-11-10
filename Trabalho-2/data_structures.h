@@ -79,6 +79,7 @@ void tree_print_preorder(t_node* root);
 // Funcoes da lista
 t_lista* list_create();
 t_elem_lista* aloc_elem(Ninja* _ninja);
+void list_insert(t_lista* lista, Ninja* n);
 void remove_lista(t_lista* lista);
 
 
