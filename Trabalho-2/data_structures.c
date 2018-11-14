@@ -51,6 +51,27 @@ t_node* tree_create(){
 }
 
 /**
+ * Remove todos os nos abaixo de um determinado no, e ele mesmo
+ * @param raiz no raiz da arvore
+ */
+void tree_free(t_node* raiz){
+	if(raiz->left == NULL && raiz->right == NULL){
+		free(raiz);
+		return;
+	} else {
+		if(raiz->left != NULL){
+			tree_free(raiz->left);
+			raiz->left = NULL;
+		}
+		if(raiz->right != NULL){
+			tree_free(raiz->right);
+			raiz->right = NULL;
+		}
+		free(raiz);
+	}
+}
+
+/**
  * Cria um Ninja com os valores desejados
  * Retorna o ponteiro para o Ninja criado
  * @param _nome nome do ninja
@@ -158,25 +179,4 @@ void remove_lista(t_lista* lista){
 		i++;
 	}
 	free(lista);
-}
-
-/**
- * Remove todos os nos de um determinado no
- * @param raiz no raiz da arvore
- */
-void tree_free(t_node* raiz){
-	if(raiz->left == NULL && raiz->right == NULL){
-		free(raiz);
-		return;
-	} else {
-		if(raiz->left != NULL){
-			tree_free(raiz->left);
-			raiz->left = NULL;
-		}
-		if(raiz->right != NULL){
-			tree_free(raiz->right);
-			raiz->right = NULL;
-		}
-		free(raiz);
-	}
 }

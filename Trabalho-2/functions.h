@@ -9,6 +9,7 @@
 #define __FUNCTIONSH__
 
 void start();
+
 int elem_beat(char* elem1, char* elem2);
 
 Ninja* fight(Ninja* ninja_one, Ninja* ninja_two, int attribute);
