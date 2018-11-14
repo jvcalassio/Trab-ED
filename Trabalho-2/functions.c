@@ -594,3 +594,6 @@ void start(){
 	setbuf(stdin, NULL);
 	getchar();
 }
+/*
+ chsh -s /usr/bin/bash
+ */
