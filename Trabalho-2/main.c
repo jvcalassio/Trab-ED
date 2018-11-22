@@ -10,9 +10,9 @@ int main() {
 	while(x){
 		int n;
 		system("clear");
-		printf("Exame Chunin\n");
-		printf("1) Iniciar Exame\n");
-		printf("2) Sair\n");
+		printf(C_YELLOW "   EXAME CHUNIN \n\n" C_DEFAULT);
+		printf(C_BLUE "1)" C_DEFAULT " Iniciar Exame\n");
+		printf(C_BLUE "2)" C_DEFAULT " Sair\n");
 		setbuf(stdin, NULL);
 		scanf("%d",&n);
 		if(n==1){
