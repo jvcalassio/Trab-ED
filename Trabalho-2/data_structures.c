@@ -107,7 +107,7 @@ Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
  * @param ninja ponteiro para o ninja a ser removido
  */
 void ninja_free(Ninja* ninja){
-	if(ninja->elemento != NULL){
+	if(ninja->nome != NULL){
 		free(ninja->nome);
 		ninja->nome = NULL;
 	}
