@@ -561,7 +561,7 @@ int start(){
 
 	/* Criacao a arvore com 4 niveis e insercao dos jogadores nos ultimos niveis */
 	t_node* raiz = tree_create();
-	Ninja* player_ninja = (get_elem_at(players,n_player))->ninja;
+	Ninja* player_ninja = (get_elem_at(players,n_player-1))->ninja;
 	insert_players(raiz, players);
 	free(players);
 
