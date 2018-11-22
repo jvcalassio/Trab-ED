@@ -407,6 +407,59 @@ t_node* sobe_level(t_node* raiz, Ninja* p_winner, int atr_player, t_lista* perde
 	}
 }
 
+void print_single_battle(t_elem_lista* p1, t_elem_lista* p2, int i, Ninja* player_ninja, int* atributos){
+	char atr_txt[4][9] = {"Ninjutsu", "Genjutsu", "Taijutsu", "Defesa"};
+
+	/* atributos de combate dos ninjas */
+	int atr_p1[] = {p1->ninja->ninjutsu, p1->ninja->genjutsu,
+						p1->ninja->taijutsu, p1->ninja->defesa};
+	int atr_p2[] = {p2->ninja->ninjutsu, p2->ninja->genjutsu,
+						p2->ninja->taijutsu, p2->ninja->defesa};
+
+	/* verifica se o player jogou nessa rodada ou nao, e a supremacia */
+	int is_player = 0, p1_supr = elem_beat(p1->ninja->elemento, p2->ninja->elemento);
+	if(p1->ninja == player_ninja)
+		is_player = 1;
+	else if(p2->ninja == player_ninja)
+		is_player = 2;
+
+	/* atributo utilizado na luta */
+	int c_atr = atributos[i] - 1;
+	float mulp1 = 1;
+	float mulp2 = 1;
+
+	if(is_player == 1){
+		/* se o p1 for o player, seta a supremacia */
+		if(p1_supr == 1)
+			mulp1 = 1.2;
+		else if(p1_supr == -1)
+			mulp1 = 0.8;
+	} else if(is_player == 2){
+		if(p1_supr == 1)
+			mulp2 = 0.8;
+		else if(p1_supr == -1)
+			mulp2 = 1.2;
+	}
+
+	char* n1 = p1->ninja->nome;
+	char* n2 = p2->ninja->nome;
+
+	if(is_player != 0)
+		printf(C_BOLD);
+
+	printf("%s (%s %d) x %s (%s %d) ",n1, atr_txt[c_atr], (int) (atr_p1[c_atr]*mulp1), 
+		n2, atr_txt[c_atr], (int) (atr_p2[c_atr]*mulp2));
+
+	if(is_player != 0)
+		printf(C_DEFAULT);
+	/* printa supremacia elemental, se houver e for o player */
+	if(is_player == 1 && p1_supr != 0)
+		printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp1);
+	else if(is_player == 2 && p1_supr != 0)
+		printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp2);
+
+	printf("\n");
+}
 
 /** 
  * Printa todas as batalhas ocorridas no jogo
@@ -419,7 +472,6 @@ void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas, int *a
 	t_elem_lista* p1 = vencedores->first;
 	t_elem_lista* p2 = perdedores->first;
 
-	char atr_txt[4][9] = {"Ninjutsu", "Genjutsu", "Taijutsu", "Defesa"};
 	int i;
 	/*
 	 	Printa todas as batalhas
@@ -428,55 +480,7 @@ void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas, int *a
 	if(rodadas >= 1){
 		printf(C_YELLOW "\n1a ETAPA:\n" C_DEFAULT);
 		for(i=0;i<8;i++){
-			/* atributos de combate dos ninjas */
-			int atr_p1[] = {p1->ninja->ninjutsu, p1->ninja->genjutsu,
-								p1->ninja->taijutsu, p1->ninja->defesa};
-			int atr_p2[] = {p2->ninja->ninjutsu, p2->ninja->genjutsu,
-								p2->ninja->taijutsu, p2->ninja->defesa};
-
-			/* verifica se o player jogou nessa rodada ou nao, e a supremacia */
-			int is_player = 0, p1_supr = elem_beat(p1->ninja->elemento, p2->ninja->elemento);
-			if(p1->ninja == player_ninja)
-				is_player = 1;
-			else if(p2->ninja == player_ninja)
-				is_player = 2;
-
-			/* atributo utilizado na luta */
-			int c_atr = atributos[i] - 1;
-			float mulp1 = 1;
-			float mulp2 = 1;
-
-			if(is_player == 1){
-				/* se o p1 for o player, seta a supremacia */
-				if(p1_supr == 1)
-					mulp1 = 1.2;
-				else if(p1_supr == -1)
-					mulp1 = 0.8;
-			} else if(is_player == 2){
-				if(p1_supr == 1)
-					mulp2 = 0.8;
-				else if(p1_supr == -1)
-					mulp2 = 1.2;
-			}
-
-			char* n1 = p1->ninja->nome;
-			char* n2 = p2->ninja->nome;
-
-			if(is_player != 0)
-				printf(C_BOLD);
-
-			printf("%s (%s %d) x %s (%s %d) ",n1, atr_txt[c_atr], (int) (atr_p1[c_atr]*mulp1), 
-				n2, atr_txt[c_atr], (int) (atr_p2[c_atr]*mulp2));
-
-			if(is_player != 0)
-				printf(C_DEFAULT);
-			/* printa supremacia elemental, se houver e for o player */
-			if(is_player == 1 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp1);
-			else if(is_player == 2 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp2);
-
-			printf("\n");
+			print_single_battle(p1,p2,i,player_ninja,atributos);
 
 			p1 = p1->prox;
 			p2 = p2->prox;
@@ -485,55 +489,7 @@ void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas, int *a
 	if(rodadas >= 2){
 		printf(C_YELLOW "\n2a ETAPA:\n" C_DEFAULT);
 		for(i=8;i<12;i++){
-			/* atributos de combate dos ninjas */
-			int atr_p1[] = {p1->ninja->ninjutsu, p1->ninja->genjutsu,
-								p1->ninja->taijutsu, p1->ninja->defesa};
-			int atr_p2[] = {p2->ninja->ninjutsu, p2->ninja->genjutsu,
-								p2->ninja->taijutsu, p2->ninja->defesa};
-
-			/* verifica se o player jogou nessa rodada ou nao, e a supremacia */
-			int is_player = 0, p1_supr = elem_beat(p1->ninja->elemento, p2->ninja->elemento);
-			if(p1->ninja == player_ninja)
-				is_player = 1;
-			else if(p2->ninja == player_ninja)
-				is_player = 2;
-
-			/* atributo utilizado na luta */
-			int c_atr = atributos[i] - 1;
-			float mulp1 = 1;
-			float mulp2 = 1;
-
-			if(is_player == 1){
-				/* se o p1 for o player, seta a supremacia */
-				if(p1_supr == 1)
-					mulp1 = 1.2;
-				else if(p1_supr == -1)
-					mulp1 = 0.8;
-			} else if(is_player == 2){
-				if(p1_supr == 1)
-					mulp2 = 0.8;
-				else if(p1_supr == -1)
-					mulp2 = 1.2;
-			}
-
-			char* n1 = p1->ninja->nome;
-			char* n2 = p2->ninja->nome;
-
-			if(is_player != 0)
-				printf(C_BOLD);
-
-			printf("%s (%s %d) x %s (%s %d) ",n1, atr_txt[c_atr], (int) (atr_p1[c_atr]*mulp1), 
-				n2, atr_txt[c_atr], (int) (atr_p2[c_atr]*mulp2));
-
-			if(is_player != 0)
-				printf(C_DEFAULT);
-			/* printa supremacia elemental, se houver e for o player */
-			if(is_player == 1 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp1);
-			else if(is_player == 2 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp2);
-
-			printf("\n");
+			print_single_battle(p1,p2,i,player_ninja,atributos);
 
 			p1 = p1->prox;
 			p2 = p2->prox;
@@ -542,111 +498,16 @@ void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas, int *a
 	if(rodadas >= 3){
 		printf(C_YELLOW "\n3a ETAPA:\n" C_DEFAULT);
 		for(i=12;i<14;i++){
-			/* atributos de combate dos ninjas */
-			int atr_p1[] = {p1->ninja->ninjutsu, p1->ninja->genjutsu,
-								p1->ninja->taijutsu, p1->ninja->defesa};
-			int atr_p2[] = {p2->ninja->ninjutsu, p2->ninja->genjutsu,
-								p2->ninja->taijutsu, p2->ninja->defesa};
-
-			/* verifica se o player jogou nessa rodada ou nao, e a supremacia */
-			int is_player = 0, p1_supr = elem_beat(p1->ninja->elemento, p2->ninja->elemento);
-			if(p1->ninja == player_ninja)
-				is_player = 1;
-			else if(p2->ninja == player_ninja)
-				is_player = 2;
-
-			/* atributo utilizado na luta */
-			int c_atr = atributos[i] - 1;
-			float mulp1 = 1;
-			float mulp2 = 1;
-
-			if(is_player == 1){
-				/* se o p1 for o player, seta a supremacia */
-				if(p1_supr == 1)
-					mulp1 = 1.2;
-				else if(p1_supr == -1)
-					mulp1 = 0.8;
-			} else if(is_player == 2){
-				if(p1_supr == 1)
-					mulp2 = 0.8;
-				else if(p1_supr == -1)
-					mulp2 = 1.2;
-			}
-
-			char* n1 = p1->ninja->nome;
-			char* n2 = p2->ninja->nome;
-
-			if(is_player != 0)
-				printf(C_BOLD);
-
-			printf("%s (%s %d) x %s (%s %d) ",n1, atr_txt[c_atr], (int) (atr_p1[c_atr]*mulp1), 
-				n2, atr_txt[c_atr], (int) (atr_p2[c_atr]*mulp2));
-
-			if(is_player != 0)
-				printf(C_DEFAULT);
-			/* printa supremacia elemental, se houver e for o player */
-			if(is_player == 1 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp1);
-			else if(is_player == 2 && p1_supr != 0)
-				printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp2);
-
-			printf("\n");
+			print_single_battle(p1,p2,i,player_ninja,atributos);
 
 			p1 = p1->prox;
 			p2 = p2->prox;
 		}
 	}	
 	if(rodadas >= 4){
+		printf(C_YELLOW "\n4a ETAPA:\n" C_DEFAULT);
 		i = 14;
-		/* atributos de combate dos ninjas */
-		int atr_p1[] = {p1->ninja->ninjutsu, p1->ninja->genjutsu,
-							p1->ninja->taijutsu, p1->ninja->defesa};
-		int atr_p2[] = {p2->ninja->ninjutsu, p2->ninja->genjutsu,
-							p2->ninja->taijutsu, p2->ninja->defesa};
-
-		/* verifica se o player jogou nessa rodada ou nao, e a supremacia */
-		int is_player = 0, p1_supr = elem_beat(p1->ninja->elemento, p2->ninja->elemento);
-		if(p1->ninja == player_ninja)
-			is_player = 1;
-		else if(p2->ninja == player_ninja)
-			is_player = 2;
-
-		/* atributo utilizado na luta */
-		int c_atr = atributos[i] - 1;
-		float mulp1 = 1;
-		float mulp2 = 1;
-
-		if(is_player == 1){
-			/* se o p1 for o player, seta a supremacia */
-			if(p1_supr == 1)
-				mulp1 = 1.2;
-			else if(p1_supr == -1)
-				mulp1 = 0.8;
-		} else if(is_player == 2){
-			if(p1_supr == 1)
-				mulp2 = 0.8;
-			else if(p1_supr == -1)
-				mulp2 = 1.2;
-		}
-
-		char* n1 = p1->ninja->nome;
-		char* n2 = p2->ninja->nome;
-
-		if(is_player != 0)
-			printf(C_BOLD);
-
-		printf("%s (%s %d) x %s (%s %d) ",n1, atr_txt[c_atr], (int) (atr_p1[c_atr]*mulp1), 
-			n2, atr_txt[c_atr], (int) (atr_p2[c_atr]*mulp2));
-
-		if(is_player != 0)
-			printf(C_DEFAULT);
-		/* printa supremacia elemental, se houver e for o player */
-		if(is_player == 1 && p1_supr != 0)
-			printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp1);
-		else if(is_player == 2 && p1_supr != 0)
-			printf(C_BOLD "[x%.1f]" C_DEFAULT,mulp2);
-
-		printf("\n");
+		print_single_battle(p1,p2,i,player_ninja,atributos);
 
 		printf(C_YELLOW "\nVENCEDOR DO TORNEIO: " C_BOLD "%s\n\n" C_DEFAULT,vencedores->last->ninja->nome);
 	}	
@@ -755,7 +616,7 @@ void start(){
 		}
 
 		if(rwinner == player_ninja){ /* se o player vencer */
-			printf("Vencedor!\n");
+			printf(C_GREEN "VENCEDOR!\n\n" C_DEFAULT);
 			printf("Pressione " C_BLUE "<ENTER>" C_DEFAULT " para prosseguir\n");
 			getchar();
 
@@ -766,7 +627,7 @@ void start(){
 				print_battles(perdedores, vencedores, step, atributos, player_ninja);
 			}
 		} else { /* se o player perder */
-			printf("Derrota.\n\n");
+			printf(C_RED "DERROTA.\n\n" C_DEFAULT);
 
 			/* sobe o oponente de nivel na arvore e realiza a luta dos outros competidores */
 			sobe_level(raiz, enemy_ninja, atr_player, perdedores, vencedores, atributos);
