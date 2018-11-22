@@ -1,3 +1,8 @@
+/** 
+ * \mainpage Exame Chunin
+ * 
+ * \section intro_sec Introducao
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

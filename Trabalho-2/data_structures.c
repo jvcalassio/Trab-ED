@@ -3,9 +3,9 @@
  * @brief Contem a implementacao das funcoes para o funcionamento do programa
  * \par
  * Contem a implementacao das funcoes definidas no arquivo data_structures.h
- * --- adicionar funcoes extras adicionadas aqui ---
  * @author Joao Victor
  */
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "data_structures.h"
@@ -86,14 +86,14 @@ Ninja* ninja_create(char* _nome, char* _elemento, int _ninjutsu, int _genjutsu,
 {
 	Ninja* n = malloc(sizeof(Ninja));
 
-	// aloca a memoria necessaria e copia a string para o Ninja
+	/* aloca a memoria necessaria e copia a string para o Ninja*/
 	n->nome = malloc(strlen(_nome)+1);
 	strcpy(n->nome, _nome);
-	// aloca a memoria necessaria e copia a string para o Ninja
+	/* aloca a memoria necessaria e copia a string para o Ninja*/
 	n->elemento = malloc(strlen(_elemento)+1);
 	strcpy(n->elemento, _elemento);
 
-	// copia os outros valores
+	/* copia os outros valores*/
 	n->ninjutsu = _ninjutsu;
 	n->genjutsu	= _genjutsu;
 	n->taijutsu = _taijutsu;
@@ -179,4 +179,23 @@ void remove_lista(t_lista* lista){
 		i++;
 	}
 	free(lista);
+}
+
+/**
+ * Printa a arvore em pre ordem
+ * @param root raiz da arvore a ser impressa
+ */
+void tree_print_preorder(t_node* root){
+	if(root == NULL)
+		return;
+
+	Ninja* n = root->ninja;
+	if(n != NULL)
+		printf("%s %s %d %d %d %d\n",n->nome,n->elemento,n->ninjutsu,n->genjutsu,n->taijutsu,n->defesa);
+
+	if(root->left != NULL)
+		tree_print_preorder(root->left);
+	
+	if(root->right != NULL)
+		tree_print_preorder(root->right);
 }
