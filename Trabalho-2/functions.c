@@ -1,9 +1,8 @@
 /**
  * @file functions.c
- * @brief Contem a implementacao das funcoes para o funcionamento do programa
- * \par
- * Contem a implementacao de funcoes definidas no arquivo functions.h
- * Contem as funcoes para a realizacao do jogo
+ * @brief Implementacao das funcoes principais
+ * Implementacao de funcoes definidas no arquivo functions.h\n
+ * Funcoes para a realizacao do jogo
  * @author Joao Victor
  */
 #include <stdio.h>
@@ -13,7 +12,7 @@
 #include "functions.h"
 
 /**
- * Verifica a existencia de um numero em um vetor de inteiros
+ * Verifica a existencia de um numero em um vetor de inteiros\n
  * Retorna -1 se o vetor nao contem o elemento
  * @param n numero a ser procurado
  * @param vet vetor em que sera realizada a busca
@@ -30,7 +29,7 @@ int indexOf(int n, int vet[], int size){
 }
 
 /**
- * Mostra a lista dos personagens escolhidos do arquivo
+ * Mostra a lista dos personagens escolhidos do arquivo\n
  * Mostra apenas um atributo, escolhido aleatoriamente, para cada personagem
  * @param lista lista dos personagens
  */
@@ -86,7 +85,7 @@ void print_participants(t_lista* lista){
 }
 
 /**
- * Inicializa o jogo:
+ * Inicializa o jogo:\n
  * Le o arquivo ninjas.txt, sorteia os 16 jogadores e os insere na lista
  * @param players lista de todos os competidores
  * @param f arquivo de texto ninjas.txt
@@ -156,10 +155,10 @@ t_elem_lista* get_elem_at(t_lista* lista, int index){
 }
 
 /** 
- * Realizas comparacoes entre elementos
- * Retorna  1 se elem1 ganhar
- * Retorna -1 se elem2 ganhar
- * Retorna 0 se empatar ou os elementos nao forem adjacentes
+ * Realizas comparacoes entre elementos\n
+ * Retorna  1 se elem1 ganhar\n
+ * Retorna -1 se elem2 ganhar\n
+ * Retorna 0 se empatar ou os elementos nao forem adjacentes\n
  * @param elem1 string do primeiro elemento
  * @param elem2 string do segundo elemento
  */
@@ -199,8 +198,8 @@ int elem_beat(char* elem1, char* elem2){
 }
 
 /** 
- * Realiza a 'luta' entre dois ninjas, comparando o atributo desejado.
- * Retorna o ponteiro para o ninja vencedor
+ * Realiza a 'luta' entre dois ninjas, comparando o atributo desejado.\n
+ * Retorna o ponteiro para o ninja vencedor\n
  * @param ninja_one primeiro ninja
  * @param ninja_two segundo ninja
  * @param attribute atributo a ser comparado para definir o vencedor
@@ -274,7 +273,7 @@ void show_player_char(Ninja* n, Ninja* enemy, int chosen_last_round){
 }
 
 /**
- * Troca dois Ninjas de lugar na lista
+ * Troca dois Ninjas de lugar na lista\n
  * Utilizado para reorganizar
  * @param f primeiro elemento da lista a ser trocado
  * @param s segundo elemento da lista a ser trocado
@@ -286,8 +285,8 @@ void switch_places(t_elem_lista* f, t_elem_lista* s){
 }
 
 /**
- * Reorganiza os elementos da lista
- * Do contrario, o jogador poderia decorar a ordem que os personagens geralmente aparecem
+ * Reorganiza os elementos da lista\n
+ * Do contrario, o jogador poderia decorar a ordem que os personagens geralmente aparecem\n
  * Baseado no algoritmo Fisher-Yates shuffle
  * @param lista lista a ser reorganizada
  */
@@ -324,7 +323,7 @@ void insert_players(t_node* raiz, t_lista* players){
 }
 
 /**
- * Percorre a arvore e verifica o oponente do player
+ * Percorre a arvore e verifica o oponente do player\n
  * Retorna o ponteiro para o Ninja inimigo
  * @param raiz raiz da arvore
  * @param player_ninja Ninja do player
@@ -347,7 +346,7 @@ Ninja* get_enemy(t_node* raiz, Ninja* player_ninja){
 }
 
 /**
- * Faz o jogador (ou o oponente do jogador) subir na arvore, se ganhar
+ * Faz o jogador (ou o oponente do jogador) subir na arvore, se ganhar\n
  * Realiza a batalha dos outros personagens, e tambem faz avancar quem ganha
  * @param raiz raiz da arvore
  * @param p_winner quem ganhou no round do jogador
@@ -413,7 +412,7 @@ t_node* sobe_level(t_node* raiz, Ninja* p_winner, int atr_player, t_lista* perde
 }
 
 /** 
- * Printa uma unica batalha ocorrida
+ * Printa uma unica batalha ocorrida\n
  * Funcao auxiliar da funcao print_battles
  * @param p1 player ganhador da batalha
  * @param p2 player perdedor da batalha
@@ -529,9 +528,10 @@ void print_battles(t_lista* perdedores, t_lista* vencedores, int rodadas, int *a
 }
 
 /**
- * Funcao principal de jogo
+ * Funcao principal de jogo\n
+ * Retorna 1 se o jogador escolher voltar ao menu, ou 2 se escolher sair do jogo
  */
-void start(){
+int start(){
 	system("clear");
 	system("clear");
 	FILE* f = fopen("ninjas.txt","r");
@@ -657,11 +657,14 @@ void start(){
 		step++;
 	}
 
-	printf("\nPressione " C_BLUE "<ENTER>" C_DEFAULT " para voltar ao menu principal\n");
+	printf("\n" C_BLUE "1)" C_DEFAULT " Voltar ao menu principal\n");
+	printf(C_BLUE "2)" C_DEFAULT " Sair\n");
 	remove_lista(vencedores);
 	remove_lista(perdedores);
 	tree_free(raiz);
 
+	int btn_escolha;
 	setbuf(stdin, NULL);
-	getchar();
+	scanf("%d",&btn_escolha);
+	return btn_escolha;
 }

@@ -1,7 +1,13 @@
 /** 
  * \mainpage Exame Chunin
- * 
- * \section intro_sec Introducao
+ * Jogo Exame Chunin
+ */
+/**
+ * @file main.c
+ * @brief Arquivo principal
+ * Arquivo principal para a execucao do programa\n
+ * Contem o menu principal e a chamada de inicio de jogo
+ * @author Joao Victor
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +27,9 @@ int main() {
 		setbuf(stdin, NULL);
 		scanf("%d",&n);
 		if(n==1){
-			start();
+			int c = start();
+			if(c == 2)
+				x = 0;
 		} else if(n==2){
 			x = 0;
 		}

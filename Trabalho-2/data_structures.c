@@ -11,7 +11,7 @@
 #include "data_structures.h"
 
 /**
- * Cria um no para a arvore
+ * Cria um no para a arvore\n
  * Retorna o ponteiro para o no criado
  */
 t_node* node_create(){
@@ -41,7 +41,7 @@ void ger_tree(t_node* raiz, int ntotal){
 }
 
 /**
- * Cria a arvore completa, com os 4 niveis gerados
+ * Cria a arvore completa, com os 4 niveis gerados\n
  * Retorna o ponteiro para o nó raiz
  */
 t_node* tree_create(){
@@ -51,7 +51,7 @@ t_node* tree_create(){
 }
 
 /**
- * Remove todos os nos abaixo de um determinado no, e ele mesmo
+ * Remove todos os nos abaixo de um determinado no, e ele mesmo\n
  * @param raiz no raiz da arvore
  */
 void tree_free(t_node* raiz){
@@ -72,7 +72,7 @@ void tree_free(t_node* raiz){
 }
 
 /**
- * Cria um Ninja com os valores desejados
+ * Cria um Ninja com os valores desejados\n
  * Retorna o ponteiro para o Ninja criado
  * @param _nome nome do ninja
  * @param _elemento elemento utilizado
@@ -119,7 +119,7 @@ void ninja_free(Ninja* ninja){
 }
 
 /**
- * Cria uma lista
+ * Cria uma lista\n
  * Retorna o ponteiro para a lista criada
  */
 t_lista* list_create(){
@@ -131,7 +131,7 @@ t_lista* list_create(){
 }
 
 /**
- * Aloca um elemento para a lista
+ * Aloca um elemento para a lista\n
  * Retorna o ponteiro para o elemento criado
  * @param _ninja ninja contido no elemento
  */

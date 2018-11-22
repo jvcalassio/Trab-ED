@@ -1,9 +1,8 @@
 /**
  * @file data_structures.h
- * @brief Definicoes das estruturas e funcoes principais
+ * @brief Definicoes das estruturas e funcoes relacionadas a estas
  * \par
- * Contem as estruturas que formam a arvore e os ninjas,
- * e as assinaturas para as funcoes utilizadas
+ * Contem as estruturas que formam a arvore e os ninjas, e as assinaturas para as funcoes utilizadas
  * @author Joao Victor
  */
 
@@ -14,17 +13,17 @@
  * Estrutura para um elemento Ninja da arvore
  */
 typedef struct {
-	/*! nome do ninja*/
+	/*! Nome do ninja*/
 	char *nome;
-	/*! elemento do ninja*/
+	/*! Elemento do ninja*/
 	char *elemento;
-	/*! atributo ninjutsu do ninja (0 a 100)*/
+	/*! Atributo ninjutsu do ninja (0 a 100)*/
 	int ninjutsu;
-	/*! atributo genjutsu do ninja (0 a 100)*/
+	/*! Atributo genjutsu do ninja (0 a 100)*/
 	int genjutsu;
-	/*! atributo taijutsu do ninja (0 a 100)*/
+	/*! Atributo taijutsu do ninja (0 a 100)*/
 	int taijutsu;
-	/*! atributo defesa do ninja (0 a 100)*/
+	/*! Atributo defesa do ninja (0 a 100)*/
 	int defesa;
 } Ninja;
 
@@ -33,11 +32,11 @@ typedef struct {
  * Estrutura para os nos das arvores
  */
 typedef struct node {
-	/*! ponteiro para o ninja contido neste no*/
+	/*! Ponteiro para o ninja contido neste no*/
 	Ninja *ninja;
-	/*! ponteiro  para o elemento filho à esquerda*/
+	/*! Ponteiro  para o elemento filho à esquerda*/
 	struct node *left;
-	/*! ponteiro para o elemento filho à direita*/
+	/*! Ponteiro para o elemento filho à direita*/
 	struct node *right;
 } t_node;
 
@@ -45,11 +44,11 @@ typedef struct node {
  * Estrutura para os elementos da lista duplamente encadeada
  */
 typedef struct elem_lista{
-	/*! ninja contido no elemento da lista*/
+	/*! Ninja contido no elemento da lista*/
 	Ninja* ninja;
-	/*! elemento anterior, na lista. Caso nao tenha, é NULL*/
+	/*! Elemento anterior, na lista. Caso nao tenha, é NULL*/
 	struct elem_lista *ant;
-	/*! proximo elemento, na lista. Caso nao tenha, é NULL*/
+	/*! Proximo elemento, na lista. Caso nao tenha, é NULL*/
 	struct elem_lista *prox;
 } t_elem_lista;
 
@@ -57,11 +56,11 @@ typedef struct elem_lista{
  * Estrutura para a base da lista duplamente encadeada
  */
 typedef struct {
-	/*! primeiro elemento da lista*/
+	/*! Primeiro elemento da lista*/
 	t_elem_lista *first;
-	/*! ultimo elemento da lista*/
+	/*! Ultimo elemento da lista*/
 	t_elem_lista *last;
-	/*! quantidade de elementos na lista*/
+	/*! Quantidade de elementos na lista*/
 	int qtd;
 } t_lista;
 
